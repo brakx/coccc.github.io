@@ -1,228 +1,322 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Call of Cthulhu Character Sheet</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <title>Call of Cthulhu Character Creator</title>
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    /* --- DARK MODE BASELINE --- */
+    body.dark {
+      background: #0f0f0f;
+      color: #e6e6e6;
+    }
+
+    body.dark .section {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      box-shadow: 0 0 8px rgba(0,0,0,0.6);
+    }
+
+    body.dark input,
+    body.dark select,
+    body.dark button {
+      background: #222;
+      color: #e6e6e6;
+      border: 1px solid #444;
+    }
+
+    body.dark button:hover {
+      background: #333;
+    }
+
+    /* --- GENERAL LAYOUT --- */
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      margin: 20px;
+      background: #f5f5f5;
+      color: #222;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      text-align: center;
+      letter-spacing: 1px;
+    }
+
+    .section {
+      margin-bottom: 30px;
+      padding: 20px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 0 6px rgba(0,0,0,0.1);
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+
+    .section h2 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 5px;
+    }
+
+    /* --- SKILL ROWS --- */
+    .skill-row,
+    .weapon-row,
+    .item-row {
+      display: grid;
+      grid-template-columns: 1fr 60px 60px 60px 60px auto;
+      gap: 6px;
+      margin-bottom: 4px;
+      align-items: center;
+    }
+
+    .skill-group {
+      margin-left: 20px;
+      margin-bottom: 10px;
+    }
+
+    /* --- TABLES --- */
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      max-width: 500px;
+    }
+
+    table th, table td {
+      padding: 6px;
+      border-bottom: 1px solid #ccc;
+    }
+
+    body.dark table th, body.dark table td {
+      border-bottom: 1px solid #444;
+    }
+
+    /* --- BUTTONS --- */
+    button {
+      cursor: pointer;
+      padding: 6px 12px;
+      border-radius: 4px;
+      border: 1px solid #888;
+      background: #e0e0e0;
+      transition: background 0.2s;
+    }
+
+    button:hover {
+      background: #d0d0d0;
+    }
+
+    body.dark button {
+      background: #222;
+      border-color: #555;
+    }
+
+    body.dark button:hover {
+      background: #333;
+    }
+
+    /* --- INPUTS --- */
+    input, select {
+      padding: 4px;
+      border-radius: 4px;
+      border: 1px solid #aaa;
+    }
+
+    body.dark input, body.dark select {
+      border-color: #444;
+    }
+
+    /* --- PORTRAIT --- */
+    #portraitPreview {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border: 2px solid #555;
+      border-radius: 4px;
+      background: #000;
+    }
+
+    body.dark #portraitPreview {
+      border-color: #777;
+    }
+  </style>
 </head>
 
 <body class="aesthetic-clean">
 
-<header>
-  <h1>Call of Cthulhu Character Sheet</h1>
-  <div class="top-controls">
-    <button id="themeToggle">Dark Mode</button>
+  <h1>Call of Cthulhu Character Creator</h1>
+
+  <!-- ========================================================= -->
+  <!-- CHARACTER INFO -->
+  <!-- ========================================================= -->
+  <div class="section">
+    <h2>Character Info</h2>
+
+    <label>Name:</label>
+    <input id="charName" type="text" />
+    <button id="btnRandomName">Random Name</button>
+    <br><br>
+
+    <label>Gender:</label>
+    <select id="charGender">
+      <option value="male">Male</option>
+      <option value="female">Female</option>
+      <option value="neutral">Neutral</option>
+    </select>
+
+    <label>Age:</label>
+    <input id="charAge" type="number" min="1" />
+    <br><br>
+
+    <div id="ageChoiceContainer" style="display:none;">
+      <label>Teen Penalty:</label>
+      <select id="agePenalty">
+        <option value="STR">STR</option>
+        <option value="SIZ">SIZ</option>
+      </select>
+
+      <label>Teen Bonus:</label>
+      <select id="ageBonus">
+        <option value="DEX">DEX</option>
+        <option value="APP">APP</option>
+      </select>
+    </div>
+
+    <br>
+
+    <label>Region:</label>
+    <input id="charRegion" type="text" />
+
+    <label>Profession:</label>
+    <select id="charProfession"></select>
+    <br><br>
+
+    <label>Credit Rating Range:</label>
+    <input id="creditRatingRange" type="text" readonly />
   </div>
-</header>
 
-<main>
+  <!-- ========================================================= -->
+  <!-- PORTRAIT -->
+  <!-- ========================================================= -->
+  <div class="section">
+    <h2>Portrait</h2>
 
-  <!-- SECTION 1: CHARACTER INFO -->
-  <section id="section1">
-    <h2>1. Character Information</h2>
+    <img id="portraitPreview" src="" alt="Portrait" />
+    <br><br>
 
-    <div class="grid-2">
-      <div>
-        <label>Name</label>
-        <input type="text" id="charName">
-      </div>
+    <label>Portrait URL:</label>
+    <input id="portraitUrl" type="text" style="width:300px;" />
+    <button id="btnApplyPortrait">Apply</button>
+    <br><br>
 
-      <div>
-        <label>Gender</label>
-        <select id="charGender">
-          <option value="male">Male</option>
-          <option value="female">Female</option>
-          <option value="nonbinary">Non-binary</option>
-        </select>
-      </div>
+    <label>Upload File:</label>
+    <input id="portraitFile" type="file" accept="image/*" />
+  </div>
 
-      <div>
-        <label>Age</label>
-        <input type="number" id="charAge" min="1">
-      </div>
+  <!-- ========================================================= -->
+  <!-- STATS -->
+  <!-- ========================================================= -->
+  <div class="section">
+    <h2>Stats</h2>
 
-      <div>
-        <label>Region</label>
-        <input type="text" id="charRegion" placeholder="e.g., US, Japan, UK">
-      </div>
+    <label>Roll Mode:</label>
+    <select id="statMode">
+      <option value="raw">Raw</option>
+      <option value="average">Average</option>
+    </select>
+    <button id="btnRollStats">Roll Stats</button>
+    <br><br>
 
-      <div>
-        <label>Profession</label>
-        <select id="charProfession"></select>
-      </div>
+    <table>
+      <tr><th>Stat</th><th>Raw</th><th>Modified</th></tr>
+      <tr><td>STR</td><td><input id="statSTR_raw"></td><td><input id="statSTR_mod"></td></tr>
+      <tr><td>CON</td><td><input id="statCON_raw"></td><td><input id="statCON_mod"></td></tr>
+      <tr><td>DEX</td><td><input id="statDEX_raw"></td><td><input id="statDEX_mod"></td></tr>
+      <tr><td>APP</td><td><input id="statAPP_raw"></td><td><input id="statAPP_mod"></td></tr>
+      <tr><td>POW</td><td><input id="statPOW_raw"></td><td><input id="statPOW_mod"></td></tr>
+      <tr><td>SIZ</td><td><input id="statSIZ_raw"></td><td><input id="statSIZ_mod"></td></tr>
+      <tr><td>INT</td><td><input id="statINT_raw"></td><td><input id="statINT_mod"></td></tr>
+      <tr><td>EDU</td><td><input id="statEDU_raw"></td><td><input id="statEDU_mod"></td></tr>
+    </table>
 
-      <div>
-        <label>Stat Generation Mode</label>
-        <select id="statMode">
-          <option value="raw">RAW (3d6×5 / 2d6+6×5 / 3d6+3×5)</option>
-          <option value="average">Average of 3 rolls</option>
-        </select>
-      </div>
-    </div>
+    <br>
+    <button id="btnApplyAge">Apply Age Modifiers</button>
+    <button id="btnCalcDerived">Calculate Derived</button>
 
-    <div class="row">
-      <button id="btnRandomName">Random Name</button>
-      <button id="btnRollStats">Roll Stats</button>
-      <button id="btnApplyAge">Apply Age Modifiers</button>
-      <button id="btnCalcDerived">Calculate Derived</button>
-    </div>
+    <h3>Derived Stats</h3>
+    <label>HP:</label><input id="derivedHP" readonly>
+    <label>MP:</label><input id="derivedMP" readonly>
+    <label>SAN:</label><input id="derivedSAN" readonly>
+    <label>Luck:</label><input id="derivedLuck" readonly>
+    <label>DB:</label><input id="derivedDB" readonly>
+    <label>Build:</label><input id="derivedBuild" readonly>
+    <label>Move:</label><input id="derivedMove" readonly>
+  </div>
 
-    <!-- Portrait -->
-    <div class="portrait-wrapper">
-      <div style="flex:1;">
-        <label>Portrait Upload</label>
-        <input type="file" id="portraitFile" accept="image/*">
-
-        <label style="margin-top:6px;">Portrait URL</label>
-        <input type="text" id="portraitUrl" placeholder="https://...">
-        <button id="btnApplyPortrait" style="margin-top:4px;">Apply Portrait</button>
-      </div>
-
-      <div>
-        <label class="small-label">Portrait Preview</label>
-        <img id="portraitPreview" alt="Portrait">
-      </div>
-    </div>
-
-    <!-- RAW CHARACTERISTICS -->
-    <h3 class="subheading">Characteristics (Raw)</h3>
-    <div class="stats-grid">
-      <div><label>STR</label><input type="number" id="statSTR_raw"></div>
-      <div><label>CON</label><input type="number" id="statCON_raw"></div>
-      <div><label>DEX</label><input type="number" id="statDEX_raw"></div>
-      <div><label>APP</label><input type="number" id="statAPP_raw"></div>
-      <div><label>POW</label><input type="number" id="statPOW_raw"></div>
-      <div><label>SIZ</label><input type="number" id="statSIZ_raw"></div>
-      <div><label>INT</label><input type="number" id="statINT_raw"></div>
-      <div><label>EDU</label><input type="number" id="statEDU_raw"></div>
-    </div>
-
-    <!-- AGE CHOICE DROPDOWNS (15–19 only) -->
-    <div id="ageChoiceContainer" class="grid-2" style="margin-top:10px; display:none;">
-      <div>
-        <label>Penalty applies to:</label>
-        <select id="agePenalty">
-          <option value="STR">STR</option>
-          <option value="SIZ">SIZ</option>
-        </select>
-      </div>
-
-      <div>
-        <label>Bonus applies to:</label>
-        <select id="ageBonus">
-          <option value="DEX">DEX</option>
-          <option value="APP">APP</option>
-        </select>
-      </div>
-    </div>
-
-    <!-- MODIFIED CHARACTERISTICS -->
-    <h3 class="subheading">Characteristics (Age‑Modified)</h3>
-    <div class="stats-grid">
-      <div><label>STR</label><input type="number" id="statSTR_mod" readonly></div>
-      <div><label>CON</label><input type="number" id="statCON_mod" readonly></div>
-      <div><label>DEX</label><input type="number" id="statDEX_mod" readonly></div>
-      <div><label>APP</label><input type="number" id="statAPP_mod" readonly></div>
-      <div><label>POW</label><input type="number" id="statPOW_mod" readonly></div>
-      <div><label>SIZ</label><input type="number" id="statSIZ_mod" readonly></div>
-      <div><label>INT</label><input type="number" id="statINT_mod" readonly></div>
-      <div><label>EDU</label><input type="number" id="statEDU_mod" readonly></div>
-    </div>
-
-    <!-- DERIVED STATS -->
-    <h3 class="subheading">Derived Stats</h3>
-    <div class="stats-grid">
-      <div><label>HP</label><input type="number" id="derivedHP" readonly></div>
-      <div><label>MP</label><input type="number" id="derivedMP" readonly></div>
-      <div><label>SAN</label><input type="number" id="derivedSAN" readonly></div>
-      <div><label>Luck</label><input type="number" id="derivedLuck" readonly></div>
-      <div><label>DB</label><input type="text" id="derivedDB" readonly></div>
-      <div><label>Build</label><input type="number" id="derivedBuild" readonly></div>
-      <div><label>Move</label><input type="number" id="derivedMove" readonly></div>
-    </div>
-  </section>
-
-  <!-- SECTION 2: SKILLS -->
-  <section id="section2">
-    <h2>2. Skills</h2>
-    <p class="small-label">Base = starting value. Occ = occupation bonus. PI = personal interest. Total = Base + Occ + PI.</p>
-
-    <h3 class="subheading">Standard Skills</h3>
+  <!-- ========================================================= -->
+  <!-- SKILLS -->
+  <!-- ========================================================= -->
+  <div class="section">
+    <h2>Skills</h2>
     <div id="skillsContainer"></div>
 
-    <h3 class="subheading">Custom Skills</h3>
-    <div class="grid-2">
-      <div>
-        <label>Name</label>
-        <input type="text" id="customSkillName">
-      </div>
-      <div>
-        <label>Base</label>
-        <input type="number" id="customSkillBase" value="1">
-      </div>
-    </div>
-    <div class="row">
-      <button id="btnAddCustomSkill">Add Custom Skill</button>
-    </div>
-    <div id="customSkillsContainer" style="margin-top:8px;"></div>
+    <h3>Custom Skills</h3>
+    <input id="customSkillName" placeholder="Skill Name">
+    <input id="customSkillBase" type="number" value="1">
+    <button id="btnAddCustomSkill">Add Custom Skill</button>
 
-    <div class="row" style="margin-top:8px;">
-      <span class="small-label">Occupation points (EDU×4):</span>
-      <input type="number" id="occupationPoints" readonly style="width:80px;">
-      <span class="small-label">Credit Rating range:</span>
-      <input type="text" id="creditRatingRange" readonly style="width:140px;">
-    </div>
-  </section>
+    <div id="customSkillsContainer"></div>
+  </div>
 
-  <!-- SECTION 3: WEAPONS -->
-  <section id="section3">
-    <h2>3. Weapons</h2>
-    <div class="row">
-      <button id="btnAddWeapon">Add Weapon</button>
-    </div>
-    <div class="list-header">
-      <span>Name</span><span>Skill</span><span>Damage</span><span>Range</span><span>Ammo</span><span>Cost</span>
-    </div>
+  <!-- ========================================================= -->
+  <!-- WEAPONS -->
+  <!-- ========================================================= -->
+  <div class="section">
+    <h2>Weapons</h2>
+    <button id="btnAddWeapon">Add Weapon</button>
     <div id="weaponsList"></div>
-  </section>
+  </div>
 
-  <!-- SECTION 4: INVENTORY -->
-  <section id="section4">
-    <h2>4. Inventory</h2>
-    <div class="row">
-      <button id="btnAddItem">Add Item</button>
-    </div>
-    <div class="list-header">
-      <span>Name</span><span>Quantity</span><span>Cost</span><span>Notes</span><span></span><span></span>
-    </div>
+  <!-- ========================================================= -->
+  <!-- INVENTORY -->
+  <!-- ========================================================= -->
+  <div class="section">
+    <h2>Inventory</h2>
+    <button id="btnAddItem">Add Item</button>
     <div id="itemsList"></div>
-  </section>
+  </div>
 
-  <!-- SECTION 5: SAVE / IMPORT / PRINT / AESTHETIC -->
-  <section id="section5">
-    <h2>5. Save / Import / Print / Aesthetic Mode</h2>
-    <div class="footer-controls">
-      <button id="btnSave">Save</button>
-      <button id="btnLoad">Load</button>
-      <button id="btnExport">Export JSON</button>
-      <button id="btnImport">Import JSON</button>
-      <input type="file" id="fileImport" style="display:none" accept="application/json">
-      <button onclick="window.print()">Print</button>
+  <!-- ========================================================= -->
+  <!-- THEME + AESTHETIC -->
+  <!-- ========================================================= -->
+  <div class="section">
+    <h2>Appearance</h2>
 
-      <div>
-        <label>Aesthetic Mode</label>
-        <select id="aestheticMode">
-          <option value="clean">Clean Modern</option>
-          <option value="typewriter">Typewriter (1920s)</option>
-          <option value="hybrid">Hybrid</option>
-        </select>
-      </div>
-    </div>
-  </section>
+    <button id="themeToggle">Dark Mode</button>
 
-</main>
+    <label>Aesthetic:</label>
+    <select id="aestheticMode">
+      <option value="clean">Clean</option>
+      <option value="typewriter">Typewriter</option>
+      <option value="hybrid">Hybrid</option>
+    </select>
+  </div>
 
-<script src="script.js"></script>
+  <!-- ========================================================= -->
+  <!-- SAVE / LOAD -->
+  <!-- ========================================================= -->
+  <div class="section">
+    <h2>Save / Load</h2>
+
+    <button id="btnSave">Save</button>
+    <button id="btnLoad">Load</button>
+    <button id="btnExport">Export</button>
+    <button id="btnImport">Import</button>
+
+    <input id="fileImport" type="file" accept="application/json" style="display:none;">
+  </div>
+
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>
