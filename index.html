@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Call of Cthulhu Character Sheet</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="aesthetic-clean">
+
+<header>
+  <h1>Call of Cthulhu Character Sheet</h1>
+  <div class="top-controls">
+    <button id="themeToggle">Dark Mode</button>
+  </div>
+</header>
+
+<main>
+
+  <!-- SECTION 1: CHARACTER INFO -->
+  <section id="section1">
+    <h2>1. Character Information</h2>
+
+    <div class="grid-2">
+      <div>
+        <label>Name</label>
+        <input type="text" id="charName">
+      </div>
+
+      <div>
+        <label>Gender</label>
+        <select id="charGender">
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="nonbinary">Non-binary</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Age</label>
+        <input type="number" id="charAge" min="1">
+      </div>
+
+      <div>
+        <label>Region</label>
+        <input type="text" id="charRegion" placeholder="e.g., US, Japan, UK">
+      </div>
+
+      <div>
+        <label>Profession</label>
+        <select id="charProfession"></select>
+      </div>
+
+      <div>
+        <label>Stat Generation Mode</label>
+        <select id="statMode">
+          <option value="raw">RAW (3d6×5 / 2d6+6×5 / 3d6+3×5)</option>
+          <option value="average">Average of 3 rolls</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <button id="btnRandomName">Random Name</button>
+      <button id="btnRollStats">Roll Stats</button>
+      <button id="btnApplyAge">Apply Age Modifiers</button>
+      <button id="btnCalcDerived">Calculate Derived</button>
+    </div>
+
+    <!-- Portrait -->
+    <div class="portrait-wrapper">
+      <div style="flex:1;">
+        <label>Portrait Upload</label>
+        <input type="file" id="portraitFile" accept="image/*">
+
+        <label style="margin-top:6px;">Portrait URL</label>
+        <input type="text" id="portraitUrl" placeholder="https://...">
+        <button id="btnApplyPortrait" style="margin-top:4px;">Apply Portrait</button>
+      </div>
+
+      <div>
+        <label class="small-label">Portrait Preview</label>
+        <img id="portraitPreview" alt="Portrait">
+      </div>
+    </div>
+
+    <!-- RAW CHARACTERISTICS -->
+    <h3 class="subheading">Characteristics (Raw)</h3>
+    <div class="stats-grid">
+      <div><label>STR</label><input type="number" id="statSTR_raw"></div>
+      <div><label>CON</label><input type="number" id="statCON_raw"></div>
+      <div><label>DEX</label><input type="number" id="statDEX_raw"></div>
+      <div><label>APP</label><input type="number" id="statAPP_raw"></div>
+      <div><label>POW</label><input type="number" id="statPOW_raw"></div>
+      <div><label>SIZ</label><input type="number" id="statSIZ_raw"></div>
+      <div><label>INT</label><input type="number" id="statINT_raw"></div>
+      <div><label>EDU</label><input type="number" id="statEDU_raw"></div>
+    </div>
+
+    <!-- AGE CHOICE DROPDOWNS (15–19 only) -->
+    <div id="ageChoiceContainer" class="grid-2" style="margin-top:10px; display:none;">
+      <div>
+        <label>Penalty applies to:</label>
+        <select id="agePenalty">
+          <option value="STR">STR</option>
+          <option value="SIZ">SIZ</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Bonus applies to:</label>
+        <select id="ageBonus">
+          <option value="DEX">DEX</option>
+          <option value="APP">APP</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- MODIFIED CHARACTERISTICS -->
+    <h3 class="subheading">Characteristics (Age‑Modified)</h3>
+    <div class="stats-grid">
+      <div><label>STR</label><input type="number" id="statSTR_mod" readonly></div>
+      <div><label>CON</label><input type="number" id="statCON_mod" readonly></div>
+      <div><label>DEX</label><input type="number" id="statDEX_mod" readonly></div>
+      <div><label>APP</label><input type="number" id="statAPP_mod" readonly></div>
+      <div><label>POW</label><input type="number" id="statPOW_mod" readonly></div>
+      <div><label>SIZ</label><input type="number" id="statSIZ_mod" readonly></div>
+      <div><label>INT</label><input type="number" id="statINT_mod" readonly></div>
+      <div><label>EDU</label><input type="number" id="statEDU_mod" readonly></div>
+    </div>
+
+    <!-- DERIVED STATS -->
+    <h3 class="subheading">Derived Stats</h3>
+    <div class="stats-grid">
+      <div><label>HP</label><input type="number" id="derivedHP" readonly></div>
+      <div><label>MP</label><input type="number" id="derivedMP" readonly></div>
+      <div><label>SAN</label><input type="number" id="derivedSAN" readonly></div>
+      <div><label>Luck</label><input type="number" id="derivedLuck" readonly></div>
+      <div><label>DB</label><input type="text" id="derivedDB" readonly></div>
+      <div><label>Build</label><input type="number" id="derivedBuild" readonly></div>
+      <div><label>Move</label><input type="number" id="derivedMove" readonly></div>
+    </div>
+  </section>
+
+  <!-- SECTION 2: SKILLS -->
+  <section id="section2">
+    <h2>2. Skills</h2>
+    <p class="small-label">Base = starting value. Occ = occupation bonus. PI = personal interest. Total = Base + Occ + PI.</p>
+
+    <h3 class="subheading">Standard Skills</h3>
+    <div id="skillsContainer"></div>
+
+    <h3 class="subheading">Custom Skills</h3>
+    <div class="grid-2">
+      <div>
+        <label>Name</label>
+        <input type="text" id="customSkillName">
+      </div>
+      <div>
+        <label>Base</label>
+        <input type="number" id="customSkillBase" value="1">
+      </div>
+    </div>
+    <div class="row">
+      <button id="btnAddCustomSkill">Add Custom Skill</button>
+    </div>
+    <div id="customSkillsContainer" style="margin-top:8px;"></div>
+
+    <div class="row" style="margin-top:8px;">
+      <span class="small-label">Occupation points (EDU×4):</span>
+      <input type="number" id="occupationPoints" readonly style="width:80px;">
+      <span class="small-label">Credit Rating range:</span>
+      <input type="text" id="creditRatingRange" readonly style="width:140px;">
+    </div>
+  </section>
+
+  <!-- SECTION 3: WEAPONS -->
+  <section id="section3">
+    <h2>3. Weapons</h2>
+    <div class="row">
+      <button id="btnAddWeapon">Add Weapon</button>
+    </div>
+    <div class="list-header">
+      <span>Name</span><span>Skill</span><span>Damage</span><span>Range</span><span>Ammo</span><span>Cost</span>
+    </div>
+    <div id="weaponsList"></div>
+  </section>
+
+  <!-- SECTION 4: INVENTORY -->
+  <section id="section4">
+    <h2>4. Inventory</h2>
+    <div class="row">
+      <button id="btnAddItem">Add Item</button>
+    </div>
+    <div class="list-header">
+      <span>Name</span><span>Quantity</span><span>Cost</span><span>Notes</span><span></span><span></span>
+    </div>
+    <div id="itemsList"></div>
+  </section>
+
+  <!-- SECTION 5: SAVE / IMPORT / PRINT / AESTHETIC -->
+  <section id="section5">
+    <h2>5. Save / Import / Print / Aesthetic Mode</h2>
+    <div class="footer-controls">
+      <button id="btnSave">Save</button>
+      <button id="btnLoad">Load</button>
+      <button id="btnExport">Export JSON</button>
+      <button id="btnImport">Import JSON</button>
+      <input type="file" id="fileImport" style="display:none" accept="application/json">
+      <button onclick="window.print()">Print</button>
+
+      <div>
+        <label>Aesthetic Mode</label>
+        <select id="aestheticMode">
+          <option value="clean">Clean Modern</option>
+          <option value="typewriter">Typewriter (1920s)</option>
+          <option value="hybrid">Hybrid</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
