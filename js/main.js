@@ -6,8 +6,8 @@
 // ------------------------------
 // Imports
 // ------------------------------
+import { bindCharacterUI } from "./ui/characterUI.js";
 import { professions } from "./data/professions.js";
-
 import {
   buildSkillsUI,
   highlightOccupationSkills,
@@ -49,10 +49,14 @@ import {
 // ======================================================
 window.addEventListener("DOMContentLoaded", async () => {
 
-  // ------------------------------
-  // Build skills UI
-  // ------------------------------
-  buildSkillsUI();
+// Build skills UI
+buildSkillsUI();
+
+
+//----------------------
+// Bind Character UI
+//-----------------------
+bindCharacterUI();
 
   // ------------------------------
   // Populate professions dropdown

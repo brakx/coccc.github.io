@@ -60,10 +60,12 @@ export function collectData() {
         DB: document.getElementById("derivedDB").value,
         Build: document.getElementById("derivedBuild").value,
         Move: document.getElementById("derivedMove").value
-      },
+  },
 
-      portraitUrl: document.getElementById("portraitPreview").src
-    },
+  portraitUrl: document.getElementById("portraitPreview").src,
+  background: document.getElementById("charBackground").value
+},
+
 
     skills: {},
     customSkills: {},
@@ -125,7 +127,7 @@ export function collectData() {
 // ------------------------------------------------------
 // Apply loaded data to the UI
 // ------------------------------------------------------
-export function applyData(data) {
+export async function applyData(data) {
   if (!data) return;
 
   const c = data.character || {};
@@ -167,10 +169,13 @@ export function applyData(data) {
     document.getElementById("derivedMove").value = c.derived.Move || "";
   }
 
-  // Portrait
-  if (c.portraitUrl) {
-    document.getElementById("portraitPreview").src = c.portraitUrl;
-  }
+// Portrait
+if (c.portraitUrl) {
+  document.getElementById("portraitPreview").src = c.portraitUrl;
+}
+
+// Background
+document.getElementById("charBackground").value = c.background || "";
 
   // Reset skills before rebuilding
   resetSkills();

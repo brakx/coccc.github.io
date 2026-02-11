@@ -185,8 +185,15 @@
 
     <br>
 
-    <label>Region:</label>
-    <input id="charRegion" type="text" />
+<label>Region:</label>
+<select id="charRegion">
+  <option value="">-- Select Region --</option>
+  <option value="north_america">North American</option>
+  <option value="latin_america">Latin American</option>
+  <option value="europe">European</option>
+  <option value="africa">African</option>
+  <option value="asia">Asian</option>
+</select>
 
     <label>Profession:</label>
     <select id="charProfession"></select>
@@ -194,6 +201,11 @@
 
     <label>Credit Rating Range:</label>
     <input id="creditRatingRange" type="text" readonly />
+<br><br>
+
+<label>Background:</label><br>
+<textarea id="charBackground" rows="5" style="width:100%;"></textarea>
+
   </div>
 
   <!-- ========================================================= -->
